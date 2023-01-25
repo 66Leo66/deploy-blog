@@ -22,6 +22,7 @@ jobs:
           fetch-depth: '0'
           submodules: 'true'
           repository: 66Leo66/blog.6leo6.com
+          token: ${{ secrets.PAT }}
       
       - name: Correct Timezone
         uses: szenius/set-timezone@v1.1

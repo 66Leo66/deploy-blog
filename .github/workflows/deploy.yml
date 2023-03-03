@@ -40,4 +40,5 @@ jobs:
           vercel-projectId: ${{ secrets.VERCEL_PROJECTID }}
           vercel-orgId: ${{ secrets.VERCEL_ORGID }}
           production: 'true'
+          dir: 'dist'
           # vercel-region: 'hkg1'

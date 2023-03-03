@@ -7,30 +7,30 @@ on:
       - main
   
 jobs:
-  hugo-blog:
-    if: github.ref_name == 'main'
+  build:
+    name: Build
     runs-on: ubuntu-latest
     permissions:
-      deployments: write
-    environment:
-      name: production
-      url: ${{ steps.deploy.outputs.deployment-url }}
+      contents: read
+    concurrency:
+      group: build
+      cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v3
-        name: Checkout
-        with:
-          fetch-depth: '0'
-          submodules: 'true'
-          repository: 66Leo66/blog.6leo6.com
-          token: ${{ secrets.PAT }}
-      
-      - name: Correct Timezone
-        uses: szenius/set-timezone@v1.1
+      - uses: szenius/set-timezone@v1.1
         with:
           timezoneLinux: "Asia/Shanghai"
-      
-      - name: Generate
-        uses: 66Leo66/build-hugo-blog@v2
+      - uses: actions/checkout@v3
+        with:
+          repository: 66Leo66/blog.6leo6.com
+          token: ${{ secrets.PAT }} # `GH_PAT` is a secret that contains your PAT
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+
+      - run: yarn install
+      - run: yarn build
+      # - run: ls
 
       - name: Deploy
         id: deploy
